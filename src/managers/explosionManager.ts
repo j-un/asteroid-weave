@@ -23,7 +23,7 @@ export function initializeExplosionManager(
 /**
  * 爆発エフェクトを作成してシーンに追加
  */
-export function createExplosion(impactPoint: THREE.Vector3): void {
+export function createExplosion(): void {
   if (!scene || !camera) {
     console.warn('爆発マネージャーが初期化されていません');
     return;

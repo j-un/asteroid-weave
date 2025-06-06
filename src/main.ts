@@ -245,6 +245,12 @@ function animate(): void {
         UIManager.getWormholeBonusCount()
       );
 
+      // ワームホールに衝突した場合の処理
+      if (wormholeCollisionResult.hit) {
+        // ワームホール通過時の処理をここに追加
+        // handleWormholePassはWormholeManager内で呼び出されるため、ここでは追加の処理は不要
+      }
+
       // 小惑星との衝突判定
       // spaceshipモジュールを使用、asteroidManagerから小惑星配列を取得
       const collisionResult = Spaceship.checkCollisions(
@@ -255,7 +261,7 @@ function animate(): void {
         gameState = 'gameover';
 
         InputHandler.updateGameState(gameState, gameOver);
-        ExplosionManager.createExplosion(collisionResult.impactPoint);
+        ExplosionManager.createExplosion();
         UIManager.showGameOverScreen(
           displayedDistance,
           finalDisplaySpeed,
