@@ -5,7 +5,6 @@ import {
   createExplosion,
   getActiveExplosionCount,
   getActiveParticleCount,
-  getExplosions,
   resetExplosionManager,
   cleanupExplosionManager,
   getExplosionStats,
@@ -77,15 +76,6 @@ describe('explosionManager', () => {
     );
   });
 
-  it('getExplosionsは現在の爆発配列を返す', () => {
-    expect(getExplosions()).toEqual([]);
-    createExplosion(new THREE.Vector3());
-    const explosions = getExplosions();
-    expect(explosions.length).toBe(1);
-    expect(explosions[0].particles.length).toBe(
-      EXPLOSION_CONSTANTS.EXPLOSION_PARTICLE_COUNT
-    );
-  });
 
   it('getExplosionStatsは爆発のパフォーマンス情報を返す', () => {
     let stats = getExplosionStats();

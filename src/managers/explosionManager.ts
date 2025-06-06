@@ -205,6 +205,26 @@ export function getActiveParticleCount(): number {
   );
 }
 
+/**
+ * 爆発のパフォーマンス情報を取得
+ * @returns アクティブな爆発とパーティクルの数を含むオブジェクト
+ */
+export function getExplosionStats(): {
+  activeExplosions: number;
+  activeParticles: number;
+  averageParticlesPerExplosion: number;
+} {
+  const activeExplosions = getActiveExplosionCount();
+  const activeParticles = getActiveParticleCount();
+  const averageParticlesPerExplosion =
+    activeExplosions > 0 ? activeParticles / activeExplosions : 0;
+
+  return {
+    activeExplosions,
+    activeParticles,
+    averageParticlesPerExplosion,
+  };
+}
 
 /**
  * 爆発マネージャーの状態をリセット
