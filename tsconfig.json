@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2017", "DOM"],
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": false,
+    "removeComments": true,
+    "noEmitOnError": true,
+  },
+  "include": ["src/**/*.ts", "src/**/*.test.ts"],
+  "exclude": ["node_modules", "dist"]
+}

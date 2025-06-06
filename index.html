@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asteroid Rush β</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"> 
+    <meta 
+    name="description" 
+    content="3D Space Endless Runner" />
+    <meta property="og:title" content="Asteroid Rush" />
+    <meta property="og:description" content="3D Space Endless Runner" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://arush.n-s.tokyo/" /><meta property="og:image" content="https://arush.n-s.tokyo/logo.png"/>
+</head>
+<body>
+    <div id="opening-screen">
+        <svg id="game-logo-svg" viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="logoGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ffd900;" /> 
+                    <stop offset="100%" style="stop-color:#ff9c00;" /> 
+                </linearGradient>
+                <filter id="logoShadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feOffset in="SourceAlpha" dx="6" dy="6" result="offset1"/>
+                    <feFlood flood-color="#300050" flood-opacity="1" result="color1"/>
+                    <feComposite in="color1" in2="offset1" operator="in" result="shadow1"/>
+                    
+                    <feOffset in="SourceAlpha" dx="3" dy="3" result="offset2"/>
+                    <feFlood flood-color="#6a0dad" flood-opacity="1" result="color2"/>
+                    <feComposite in="color2" in2="offset2" operator="in" result="shadow2"/>
+
+                    <feMerge>
+                        <feMergeNode in="shadow1"/>
+                        <feMergeNode in="shadow2"/>
+                        <feMergeNode in="SourceGraphic"/> 
+                    </feMerge>
+                </filter>
+            </defs>
+        
+            <style>
+                .svg-title-text {
+                    font-family: 'Press Start 2P', cursive;
+                    text-anchor: middle;
+                    dominant-baseline: central; 
+                    paint-order: stroke fill; 
+                }
+            </style>
+        
+            <text class="svg-title-text" y="45%" font-size="70" filter="url(#logoShadow)">
+                <tspan x="50%" fill="url(#logoGradient)" stroke="#4b0082" stroke-width="4" stroke-linejoin="miter">ASTEROID</tspan>
+            </text>
+            <text class="svg-title-text" y="75%" font-size="70" filter="url(#logoShadow)">
+                <tspan x="50%" fill="url(#logoGradient)" stroke="#4b0082" stroke-width="4" stroke-linejoin="miter">RUSH</tspan>
+            </text>
+        </svg>
+
+        <p class="game-description">
+            In the 21xx, as a massive swarm of asteroids hurtles towards Earth, humanity's hope for survival lies in escaping into deep space aboard a spaceship.<br>
+            21xx年、小惑星の大群が地球に襲いかかる中、人類が生き残るための希望は、宇宙船に乗って深宇宙に脱出することにある。
+        </p>
+        <button id="start-button">START</button>
+        <p class="start-instructions">or press spacebar</p>
+    </div>
+
+    <div id="cockpit-overlay">
+        <div id="cockpit-window-frame"></div>
+        <div class="cockpit-seam vertical-left"></div>
+        <div class="cockpit-seam vertical-right"></div>
+        <div class="cockpit-seam horizontal-top"></div>
+        <div class="cockpit-seam horizontal-bottom"></div>
+    </div>
+
+    <div class="ui-container">
+        <div id="score-container" class="ui-element"></div>
+        <div id="speed-container" class="ui-element"></div>
+    </div>
+
+    <div id="instructions"></div>
+    <div id="game-over-container">
+        <div id="game-over-title">Humanity's hope is crushed...</div>
+        <div id="final-score-title">Final Score</div>
+        <div id="final-score-details"></div>
+        <div id="restart-section">
+            <button id="restart-button">RESTART</button>
+            <p class="start-instructions">or press spacebar</p>
+        </div>
+    </div>
+    <div id="wormhole-bonus-message"></div>
+    <div id="cosmic-velocity-message"></div> 
+
+    <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
