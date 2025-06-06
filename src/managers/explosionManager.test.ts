@@ -52,30 +52,29 @@ describe('explosionManager', () => {
   it('initializeExplosionManagerはシーンとカメラの参照を設定する', () => {
     // initializeExplosionManagerは内部変数を設定するだけなので、直接テストは難しい。
     // 間接的に、createExplosionがscene.addを呼び出すことを確認することでテストできる。
-    createExplosion(new THREE.Vector3());
+    createExplosion();
     expect(mockScene.add).toHaveBeenCalled();
   });
 
   it('getActiveExplosionCountは現在アクティブな爆発の数を返す', () => {
     expect(getActiveExplosionCount()).toBe(0);
-    createExplosion(new THREE.Vector3());
+    createExplosion();
     expect(getActiveExplosionCount()).toBe(1);
-    createExplosion(new THREE.Vector3());
+    createExplosion();
     expect(getActiveExplosionCount()).toBe(2);
   });
 
   it('getActiveParticleCountは現在アクティブなパーティクルの総数を返す', () => {
     expect(getActiveParticleCount()).toBe(0);
-    createExplosion(new THREE.Vector3()); // EXPLOSION_PARTICLE_COUNT個のパーティクルが生成される
+    createExplosion(); // EXPLOSION_PARTICLE_COUNT個のパーティクルが生成される
     expect(getActiveParticleCount()).toBe(
       EXPLOSION_CONSTANTS.EXPLOSION_PARTICLE_COUNT
     );
-    createExplosion(new THREE.Vector3());
+    createExplosion();
     expect(getActiveParticleCount()).toBe(
       EXPLOSION_CONSTANTS.EXPLOSION_PARTICLE_COUNT * 2
     );
   });
-
 
   it('getExplosionStatsは爆発のパフォーマンス情報を返す', () => {
     let stats = getExplosionStats();
@@ -83,7 +82,7 @@ describe('explosionManager', () => {
     expect(stats.activeParticles).toBe(0);
     expect(stats.averageParticlesPerExplosion).toBe(0);
 
-    createExplosion(new THREE.Vector3());
+    createExplosion();
     stats = getExplosionStats();
     expect(stats.activeExplosions).toBe(1);
     expect(stats.activeParticles).toBe(
@@ -93,7 +92,7 @@ describe('explosionManager', () => {
       EXPLOSION_CONSTANTS.EXPLOSION_PARTICLE_COUNT
     );
 
-    createExplosion(new THREE.Vector3());
+    createExplosion();
     stats = getExplosionStats();
     expect(stats.activeExplosions).toBe(2);
     expect(stats.activeParticles).toBe(
@@ -105,8 +104,8 @@ describe('explosionManager', () => {
   });
 
   it('resetExplosionManagerはすべての爆発を削除し、リソースを解放する', () => {
-    createExplosion(new THREE.Vector3());
-    createExplosion(new THREE.Vector3());
+    createExplosion();
+    createExplosion();
     expect(getActiveExplosionCount()).toBe(2);
     expect(getActiveParticleCount()).toBe(
       EXPLOSION_CONSTANTS.EXPLOSION_PARTICLE_COUNT * 2
@@ -125,7 +124,7 @@ describe('explosionManager', () => {
   });
 
   it('cleanupExplosionManagerはすべての爆発を削除し、参照をクリアする', () => {
-    createExplosion(new THREE.Vector3());
+    createExplosion();
     expect(getActiveExplosionCount()).toBe(1);
 
     cleanupExplosionManager();
@@ -134,7 +133,7 @@ describe('explosionManager', () => {
     // sceneとcameraがnullになることを確認 (直接アクセスできないため、間接的に確認)
     // initializeExplosionManagerを再度呼び出すことで、nullになっていることを確認できる
     initializeExplosionManager(mockScene, mockCamera); // 再初期化
-    createExplosion(new THREE.Vector3()); // nullであれば警告が出るはず
+    createExplosion(); // nullであれば警告が出るはず
     expect(mockScene.add).toHaveBeenCalledTimes(
       EXPLOSION_CONSTANTS.EXPLOSION_PARTICLE_COUNT * 2
     ); // 最初のcreateExplosionとcleanup後のcreateExplosion

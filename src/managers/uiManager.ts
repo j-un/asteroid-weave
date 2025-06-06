@@ -1,4 +1,3 @@
-import { GameState } from '../types/types';
 import { formatNumberWithCommas } from '../utils/utils';
 
 // --- UI状態管理の変数 ---
