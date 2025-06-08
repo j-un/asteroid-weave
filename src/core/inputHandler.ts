@@ -88,20 +88,14 @@ function onTouchMove(
     const deltaX = currentX - touchStartX;
     const deltaY = currentY - touchStartY;
 
-    if (
-      Math.abs(deltaX) > GAME_CONSTANTS.SWIPE_THRESHOLD ||
-      Math.abs(deltaY) > GAME_CONSTANTS.SWIPE_THRESHOLD
-    ) {
-      if (Math.abs(deltaX) > Math.abs(deltaY)) {
-        touchDirectionX = Math.sign(deltaX);
-        touchDirectionY = 0;
-      } else {
-        touchDirectionY = -Math.sign(deltaY);
-        touchDirectionX = 0;
-      }
-    } else {
-      touchDirectionX = 0;
-      touchDirectionY = 0;
+    touchDirectionX = 0;
+    touchDirectionY = 0;
+
+    if (Math.abs(deltaX) > GAME_CONSTANTS.SWIPE_THRESHOLD) {
+      touchDirectionX = Math.sign(deltaX);
+    }
+    if (Math.abs(deltaY) > GAME_CONSTANTS.SWIPE_THRESHOLD) {
+      touchDirectionY = -Math.sign(deltaY); // Y軸は逆方向
     }
   }
 }
