@@ -291,3 +291,16 @@ window.addEventListener('load', init);
 
 // ページアンロード時にクリーンアップ
 window.addEventListener('beforeunload', cleanup);
+
+// オープニング画面に戻るリンク用のイベントリスナー
+document.addEventListener('DOMContentLoaded', () => {
+  const returnToStartLink = document.getElementById('return-to-start-link');
+  if (returnToStartLink) {
+    returnToStartLink.addEventListener('click', (event) => {
+      event.preventDefault();
+      gameState = 'opening';
+      UIManager.showOpeningScreen();
+      resetGame();
+    });
+  }
+});
