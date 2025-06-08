@@ -6,6 +6,34 @@ body {
   font-family: 'Arial', sans-serif;
 }
 
+.footer {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+  z-index: 20;
+  /* font-family: 'Press Start 2P', cursive; */
+  font-family: 'Arial', sans-serif;
+  font-size: 0.8em;
+}
+
+.footer a {
+  color: #ccc;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.game-over-footer {
+  text-align: center;
+  position: static; /* 親要素のflexboxに従うようにする */
+  width: auto; /* 親要素の幅に合わせる */
+  margin-top: 20px; /* 他の要素との間隔を調整 */
+}
+
 canvas {
   display: block;
 }
