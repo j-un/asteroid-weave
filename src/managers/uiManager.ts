@@ -1,10 +1,12 @@
 import { formatNumberWithCommas } from '../utils/utils';
+import { privacyPolicyContent } from '../constants/privacyPolicy';
 
 // --- UI状態管理の変数 ---
 let firstCosmicVelocityMessageShown: boolean = false;
 let secondCosmicVelocityMessageShown: boolean = false;
 let thirdCosmicVelocityMessageShown: boolean = false;
 let wormholeBonusCount: number = 0;
+let currentLanguage: 'ja' | 'en' = 'ja'; // デフォルト言語は日本語
 
 // UI要素のキャッシュ
 interface UIElements {
@@ -21,6 +23,12 @@ interface UIElements {
   cosmicVelocityMessage: HTMLElement | null;
   startButton: HTMLElement | null;
   restartButton: HTMLElement | null;
+  privacyLink: HTMLElement | null;
+  privacyPolicyModal: HTMLElement | null;
+  closeModalButton: HTMLElement | null;
+  langJaButton: HTMLElement | null;
+  langEnButton: HTMLElement | null;
+  privacyPolicyText: HTMLElement | null;
 }
 
 const uiElements: UIElements = {
@@ -37,6 +45,12 @@ const uiElements: UIElements = {
   cosmicVelocityMessage: null,
   startButton: null,
   restartButton: null,
+  privacyLink: null,
+  privacyPolicyModal: null,
+  closeModalButton: null,
+  langJaButton: null,
+  langEnButton: null,
+  privacyPolicyText: null,
 };
 
 // ゲーム開始コールバック関数の型定義
@@ -56,6 +70,9 @@ export function initializeUIManager(): void {
 
   // イベントリスナーを設定
   setupEventListeners();
+
+  // プライバシーポリシーの初期表示
+  updatePrivacyPolicyText();
 }
 
 /**
@@ -81,6 +98,14 @@ function cacheUIElements(): void {
   );
   uiElements.startButton = document.getElementById('start-button');
   uiElements.restartButton = document.getElementById('restart-button');
+  uiElements.privacyLink = document.getElementById('privacy-link');
+  uiElements.privacyPolicyModal = document.getElementById(
+    'privacy-policy-modal'
+  );
+  uiElements.closeModalButton = document.querySelector('.close-button');
+  uiElements.langJaButton = document.getElementById('lang-ja');
+  uiElements.langEnButton = document.getElementById('lang-en');
+  uiElements.privacyPolicyText = document.getElementById('privacy-policy-text');
 }
 
 /**
@@ -92,6 +117,28 @@ function setupEventListeners(): void {
   }
   if (uiElements.restartButton) {
     uiElements.restartButton.addEventListener('click', handleGameStart);
+  }
+  if (uiElements.privacyLink) {
+    uiElements.privacyLink.addEventListener('click', showPrivacyPolicyModal);
+  }
+  if (uiElements.closeModalButton) {
+    uiElements.closeModalButton.addEventListener(
+      'click',
+      hidePrivacyPolicyModal
+    );
+  }
+  if (uiElements.privacyPolicyModal) {
+    uiElements.privacyPolicyModal.addEventListener('click', (event) => {
+      if (event.target === uiElements.privacyPolicyModal) {
+        hidePrivacyPolicyModal(); // モーダルの外側をクリックで閉じる
+      }
+    });
+  }
+  if (uiElements.langJaButton) {
+    uiElements.langJaButton.addEventListener('click', () => setLanguage('ja'));
+  }
+  if (uiElements.langEnButton) {
+    uiElements.langEnButton.addEventListener('click', () => setLanguage('en'));
   }
 
   // キーボードイベントリスナー
@@ -116,12 +163,24 @@ function handleKeyDown(event: KeyboardEvent): void {
     const openingVisible = uiElements.openingScreen?.style.display !== 'none';
     const gameOverVisible =
       uiElements.gameOverContainer?.style.display !== 'none';
+    const modalVisible =
+      uiElements.privacyPolicyModal?.style.display === 'flex'; // モーダル表示中か確認
 
     if (openingVisible || gameOverVisible) {
       event.preventDefault();
       if (gameStartCallback) {
         gameStartCallback();
       }
+    } else if (modalVisible) {
+      // モーダル表示中にスペースキーが押されたらモーダルを閉じる
+      event.preventDefault();
+      hidePrivacyPolicyModal();
+    }
+  }
+  // ESCキーでモーダルを閉じる
+  if (event.key === 'Escape') {
+    if (uiElements.privacyPolicyModal?.style.display === 'flex') {
+      hidePrivacyPolicyModal();
     }
   }
 }
@@ -148,7 +207,7 @@ export async function loadLogo(): Promise<void> {
     // フォールバック: テキストロゴを表示
     if (uiElements.logoContainer) {
       uiElements.logoContainer.innerHTML =
-        '<h1 style="font-family: \'Press Start 2P\', cursive; color: #ffd900;">ASTEROID RUSH</h1>';
+        '<h1 style="font-family: \'Press Start 2P\', cursive; color: #ffd900;">ASTEROID WEAVE</h1>';
     }
   }
 }
@@ -168,6 +227,8 @@ export function showOpeningScreen(): void {
     uiElements.wormholeBonusMessage.style.display = 'none';
   if (uiElements.cosmicVelocityMessage)
     uiElements.cosmicVelocityMessage.style.display = 'none';
+  if (uiElements.privacyPolicyModal)
+    uiElements.privacyPolicyModal.style.display = 'none'; // モーダルを非表示にする
 
   // スコア・速度表示を非表示
   hideScoreAndSpeedDisplay();
@@ -192,6 +253,8 @@ export function showGameScreen(): void {
     uiElements.instructions.innerText =
       'Arrow keys, WASD keys, or swipe to move';
   }
+  if (uiElements.privacyPolicyModal)
+    uiElements.privacyPolicyModal.style.display = 'none'; // モーダルを非表示にする
 
   // スコア・速度表示を表示
   showScoreAndSpeedDisplay();
@@ -222,6 +285,8 @@ export function showGameOverScreen(
   if (uiElements.instructions) {
     uiElements.instructions.style.display = 'none';
   }
+  if (uiElements.privacyPolicyModal)
+    uiElements.privacyPolicyModal.style.display = 'none'; // モーダルを非表示にする
 
   // ゲームオーバー画面では左上のスコア・速度表示を非表示
   hideScoreAndSpeedDisplay();
@@ -376,6 +441,70 @@ export function resetUIState(): void {
 }
 
 /**
+ * プライバシーポリシーモーダルを表示
+ */
+function showPrivacyPolicyModal(event: Event): void {
+  event.preventDefault(); // リンクのデフォルト動作をキャンセル
+  if (uiElements.privacyPolicyModal) {
+    uiElements.privacyPolicyModal.style.display = 'flex';
+  }
+  // 他のUI要素を非表示にする
+  if (uiElements.openingScreen) uiElements.openingScreen.style.display = 'none';
+  if (uiElements.gameOverContainer)
+    uiElements.gameOverContainer.style.display = 'none';
+  if (uiElements.cockpitOverlay)
+    uiElements.cockpitOverlay.style.display = 'none';
+  if (uiElements.uiContainer) uiElements.uiContainer.style.display = 'none';
+  if (uiElements.instructions) uiElements.instructions.style.display = 'none';
+  if (uiElements.wormholeBonusMessage)
+    uiElements.wormholeBonusMessage.style.display = 'none';
+  if (uiElements.cosmicVelocityMessage)
+    uiElements.cosmicVelocityMessage.style.display = 'none';
+}
+
+/**
+ * プライバシーポリシーモーダルを非表示
+ */
+function hidePrivacyPolicyModal(): void {
+  if (uiElements.privacyPolicyModal) {
+    uiElements.privacyPolicyModal.style.display = 'none';
+  }
+  // オープニング画面に戻る
+  showOpeningScreen();
+}
+
+/**
+ * プライバシーポリシーのテキストを更新
+ */
+function updatePrivacyPolicyText(): void {
+  if (uiElements.privacyPolicyText) {
+    uiElements.privacyPolicyText.innerHTML =
+      privacyPolicyContent[currentLanguage];
+  }
+  // 言語ボタンのアクティブ状態を更新
+  if (uiElements.langJaButton) {
+    uiElements.langJaButton.classList.toggle(
+      'active',
+      currentLanguage === 'ja'
+    );
+  }
+  if (uiElements.langEnButton) {
+    uiElements.langEnButton.classList.toggle(
+      'active',
+      currentLanguage === 'en'
+    );
+  }
+}
+
+/**
+ * 言語を設定
+ */
+function setLanguage(lang: 'ja' | 'en'): void {
+  currentLanguage = lang;
+  updatePrivacyPolicyText();
+}
+
+/**
  * クリーンアップ処理
  */
 export function cleanupUIManager(): void {
@@ -385,6 +514,32 @@ export function cleanupUIManager(): void {
   }
   if (uiElements.restartButton) {
     uiElements.restartButton.removeEventListener('click', handleGameStart);
+  }
+  if (uiElements.privacyLink) {
+    uiElements.privacyLink.removeEventListener('click', showPrivacyPolicyModal);
+  }
+  if (uiElements.closeModalButton) {
+    uiElements.closeModalButton.removeEventListener(
+      'click',
+      hidePrivacyPolicyModal
+    );
+  }
+  if (uiElements.privacyPolicyModal) {
+    uiElements.privacyPolicyModal.removeEventListener('click', (event) => {
+      if (event.target === uiElements.privacyPolicyModal) {
+        hidePrivacyPolicyModal();
+      }
+    });
+  }
+  if (uiElements.langJaButton) {
+    uiElements.langJaButton.removeEventListener('click', () =>
+      setLanguage('ja')
+    );
+  }
+  if (uiElements.langEnButton) {
+    uiElements.langEnButton.removeEventListener('click', () =>
+      setLanguage('en')
+    );
   }
 
   document.removeEventListener('keydown', handleKeyDown);

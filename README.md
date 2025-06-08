@@ -1,5 +1,6 @@
-# Asteroid Rush
-[![main Branch Health Check](https://github.com/j-un/asteroid-rush/actions/workflows/main-checks.yml/badge.svg)](https://github.com/j-un/asteroid-rush/actions/workflows/main-checks.yml)
+# Asteroid Weave
+
+[![main Branch Health Check](https://github.com/j-un/asteroid-weave/actions/workflows/main-checks.yml/badge.svg)](https://github.com/j-un/asteroid-weave/actions/workflows/main-checks.yml)
 
 You control a spaceship and avoid asteroids for the survival of the humanity🚀
 

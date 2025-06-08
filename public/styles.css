@@ -436,3 +436,108 @@ canvas {
     opacity: 0;
   }
 }
+
+/* Modal Styles */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 100; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #1a1a2e;
+  margin: auto;
+  padding: 30px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 700px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  color: #eee;
+  font-family: 'Arial', sans-serif;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.close-button {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.language-toggle {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.lang-link {
+  color: #ccc;
+  text-decoration: none;
+  margin: 0 5px;
+  font-size: 0.9em;
+  transition: color 0.2s ease;
+}
+
+.lang-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.lang-link.active {
+  color: #ffd900;
+  font-weight: bold;
+}
+
+#privacy-policy-text h2 {
+  color: #ffd900;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+#privacy-policy-text h3 {
+  color: #ff9c00;
+  margin-top: 15px;
+  margin-bottom: 8px;
+  font-size: 1em;
+}
+
+#privacy-policy-text p {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+#privacy-policy-text ul {
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+#privacy-policy-text li {
+  margin-bottom: 5px;
+}
+
+#privacy-policy-text a {
+  color: #eee;
+  margin-bottom: 5px;
+}

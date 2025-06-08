@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asteroid Rush β</title>
+    <title>Asteroid Weave β</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css"> 
     <meta 
     name="description" 
     content="3D Space Endless Runner" />
-    <meta property="og:title" content="Asteroid Rush" />
+    <meta property="og:title" content="Asteroid Weave" />
     <meta property="og:description" content="3D Space Endless Runner" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://arush.n-s.tokyo/" /><meta property="og:image" content="https://arush.n-s.tokyo/logo.png"/>
+    <meta property="og:url" content="https://aweave.n-s.tokyo/" /><meta property="og:image" content="https://aweave.n-s.tokyo/logo.png"/>
 </head>
 <body>
     <div id="opening-screen">
@@ -52,7 +52,7 @@
                 <tspan x="50%" fill="url(#logoGradient)" stroke="#4b0082" stroke-width="4" stroke-linejoin="miter">ASTEROID</tspan>
             </text>
             <text class="svg-title-text" y="75%" font-size="70" filter="url(#logoShadow)">
-                <tspan x="50%" fill="url(#logoGradient)" stroke="#4b0082" stroke-width="4" stroke-linejoin="miter">RUSH</tspan>
+                <tspan x="50%" fill="url(#logoGradient)" stroke="#4b0082" stroke-width="4" stroke-linejoin="miter">WEAVE</tspan>
             </text>
         </svg>
 
@@ -63,8 +63,20 @@
         <button id="start-button">START</button>
         <p class="start-instructions">or press spacebar</p>
         <div class="footer">
-            <!-- <a href="#" id="privacy-link">Privacy</a> -  -->
-            <a href="https://github.com/j-un/asteroid-rush" target="_blank">GitHub</a>
+            <a href="#" id="privacy-link">Privacy Policy</a> - 
+            <a href="https://github.com/j-un/asteroid-weave" target="_blank">GitHub</a>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacy-policy-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div class="language-toggle">
+                <a href="#" id="lang-ja" class="lang-link active">日本語</a> / 
+                <a href="#" id="lang-en" class="lang-link">English</a>
+            </div>
+            <div id="privacy-policy-text"></div>
         </div>
     </div>
 
