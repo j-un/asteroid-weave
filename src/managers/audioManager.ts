@@ -5,7 +5,7 @@ let gainNode: GainNode | null = null;
 
 export async function initializeAudioManager(): Promise<void> {
   try {
-    audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const response = await fetch('/bgm.mp3');
     const arrayBuffer = await response.arrayBuffer();
     backgroundMusicBuffer = await audioContext.decodeAudioData(arrayBuffer);
@@ -16,7 +16,7 @@ export async function initializeAudioManager(): Promise<void> {
 
 export function playBackgroundMusic(): void {
   if (!audioContext) {
-    audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
   }
 
   if (backgroundMusicBuffer && audioContext) {

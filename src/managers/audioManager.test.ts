@@ -1,4 +1,4 @@
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import * as AudioManager from './audioManager';
 
 // --- Mocks ---
@@ -50,7 +50,7 @@ const mockAudioContext = {
 const fetchSpy = vi.spyOn(globalThis, 'fetch');
 
 window.AudioContext = vi.fn().mockImplementation(() => mockAudioContext);
-(window as any).webkitAudioContext = window.AudioContext;
+window.webkitAudioContext = window.AudioContext;
 
 // --- Tests ---
 describe('AudioManager', () => {
