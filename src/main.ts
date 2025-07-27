@@ -8,6 +8,7 @@ import * as AsteroidManager from './managers/asteroidManager';
 import * as WormholeManager from './managers/wormholeManager';
 import * as ExplosionManager from './managers/explosionManager';
 import * as UIManager from './managers/uiManager';
+import * as AudioManager from './managers/audioManager';
 
 // --- グローバル変数 ---
 let internalDistanceTraveled: number = 0;
@@ -16,25 +17,6 @@ let accumulatedWormholeBonus: number = 0;
 
 let gameOver: boolean = false;
 let gameState: GameState = 'opening';
-
-let backgroundMusic: HTMLAudioElement;
-
-// 音楽再生関数
-function playBackgroundMusic(): void {
-  if (backgroundMusic) {
-    backgroundMusic
-      .play()
-      .catch((e) => console.error('Error playing music:', e));
-  }
-}
-
-// 音楽停止関数
-function stopBackgroundMusic(): void {
-  if (backgroundMusic) {
-    backgroundMusic.pause();
-    backgroundMusic.currentTime = 0;
-  }
-}
 
 // ウィンドウリサイズ処理
 function onWindowResize(): void {
@@ -63,15 +45,8 @@ function handleWormholePass(
 
 // 初期化
 async function init(): Promise<void> {
-  // 0. 音楽要素の取得
-  const musicElement = document.getElementById('background-music');
-  if (musicElement instanceof HTMLAudioElement) {
-    backgroundMusic = musicElement;
-  } else {
-    console.error(
-      'Background music element not found or is not an audio element.'
-    );
-  }
+  // 0. オーディオマネージャーの初期化
+  await AudioManager.initializeAudioManager();
 
   // 1. UIマネージャーの初期化
   UIManager.initializeUIManager();
@@ -137,7 +112,10 @@ function startGame(): void {
   // UI表示をゲーム画面に切り替え
   UIManager.showGameScreen();
   resetGame();
-  playBackgroundMusic(); // ゲーム開始時に音楽を再生
+  // ゲーム開始時に音楽を再生（既に再生中でなければ）
+  if (!AudioManager.isMusicPlaying()) {
+    AudioManager.playBackgroundMusic();
+  }
 
   if (SceneSetup.renderer && SceneSetup.renderer.domElement) {
     SceneSetup.renderer.domElement.focus();
@@ -313,6 +291,7 @@ function cleanup(): void {
   WormholeManager.cleanupWormholeManager();
   ExplosionManager.cleanupExplosionManager();
   UIManager.cleanupUIManager();
+  AudioManager.cleanupAudioManager();
   window.removeEventListener('resize', onWindowResize);
 }
 
@@ -331,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
       gameState = 'opening';
       UIManager.showOpeningScreen();
       resetGame();
-      stopBackgroundMusic(); // スタート画面に戻る際に音楽を停止
+      AudioManager.stopBackgroundMusic(); // スタート画面に戻る際に音楽を停止
     });
   }
 });
