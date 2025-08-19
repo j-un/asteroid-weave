@@ -39,6 +39,7 @@ const uiElements: UIElements = {
   uiContainer: null,
   instructions: null,
   logoContainer: null,
+  pauseScreen: null,
   scoreContainer: null,
   speedContainer: null,
   finalScoreDetails: null,
