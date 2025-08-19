@@ -12,9 +12,11 @@ let touchDirectionY: number = 0;
 
 // --- コールバック関数の型定義 ---
 type StartGameCallback = () => void;
+type TogglePauseCallback = () => void;
 
 // --- コールバック関数の保持 ---
 let startGameCallback: StartGameCallback | null = null;
+let togglePauseCallback: TogglePauseCallback | null = null;
 
 // --- ゲッター関数 ---
 export function getTouchState() {
@@ -31,6 +33,14 @@ function onGameKeyDown(
   gameState: GameState,
   gameOver: boolean
 ): void {
+  if (event.key === ' ' && (gameState === 'playing' || gameState === 'paused')) {
+    event.preventDefault();
+    if (togglePauseCallback) {
+      togglePauseCallback();
+    }
+    return;
+  }
+
   if (gameState === 'playing' && !gameOver) {
     keysPressed[event.key.toLowerCase()] = true;
     event.preventDefault();
@@ -132,10 +142,12 @@ let boundHandleOpeningScreenKey: ((event: KeyboardEvent) => void) | null = null;
 
 export function initializeInputHandlers(
   element: HTMLElement,
-  onStartGame: StartGameCallback
+  onStartGame: StartGameCallback,
+  onTogglePause: TogglePauseCallback
 ): void {
   domElement = element;
   startGameCallback = onStartGame;
+  togglePauseCallback = onTogglePause;
 
   // イベントハンドラーをバインド
   boundOnGameKeyDown = (event) => onGameKeyDown(event, gameState, gameOver);
@@ -186,6 +198,7 @@ export function cleanupInputHandlers(): void {
 
   domElement = null;
   startGameCallback = null;
+  togglePauseCallback = null;
   boundOnGameKeyDown = null;
   boundOnGameKeyUp = null;
   boundOnTouchStart = null;

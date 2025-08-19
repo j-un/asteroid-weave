@@ -17,6 +17,21 @@ let accumulatedWormholeBonus: number = 0;
 
 let gameOver: boolean = false;
 let gameState: GameState = 'opening';
+let isPaused: boolean = false;
+
+function togglePause(): void {
+  if (gameState !== 'playing' && gameState !== 'paused') return;
+
+  isPaused = !isPaused;
+  if (isPaused) {
+    gameState = 'paused';
+    UIManager.showPauseScreen();
+  } else {
+    gameState = 'playing';
+    UIManager.hidePauseScreen();
+  }
+  InputHandler.updateGameState(gameState, gameOver);
+}
 
 // ウィンドウリサイズ処理
 function onWindowResize(): void {
@@ -76,7 +91,8 @@ async function init(): Promise<void> {
   // 8. 入力ハンドラーの初期化
   InputHandler.initializeInputHandlers(
     SceneSetup.renderer.domElement,
-    attemptStartGame
+    attemptStartGame,
+    togglePause
   );
 
   // 9. UIのゲーム開始コールバックを設定
@@ -157,6 +173,11 @@ function resetGame(): void {
 // アニメーションループ
 function animate(): void {
   requestAnimationFrame(animate);
+
+  if (gameState === 'paused') {
+    SceneSetup.renderer.render(SceneSetup.scene, SceneSetup.camera);
+    return;
+  }
 
   // 爆発エフェクトの更新
   ExplosionManager.updateExplosions();
