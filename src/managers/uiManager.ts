@@ -16,6 +16,7 @@ interface UIElements {
   uiContainer: HTMLElement | null;
   instructions: HTMLElement | null;
   logoContainer: HTMLElement | null;
+  pauseScreen: HTMLElement | null;
   scoreContainer: HTMLElement | null;
   speedContainer: HTMLElement | null;
   finalScoreDetails: HTMLElement | null;
@@ -87,6 +88,7 @@ function cacheUIElements(): void {
   ) as HTMLElement;
   uiElements.instructions = document.getElementById('instructions');
   uiElements.logoContainer = document.getElementById('logo-container');
+  uiElements.pauseScreen = document.getElementById('pause-screen');
   uiElements.scoreContainer = document.getElementById('score-container');
   uiElements.speedContainer = document.getElementById('speed-container');
   uiElements.finalScoreDetails = document.getElementById('final-score-details');
@@ -229,6 +231,7 @@ export function showOpeningScreen(): void {
     uiElements.cosmicVelocityMessage.style.display = 'none';
   if (uiElements.privacyPolicyModal)
     uiElements.privacyPolicyModal.style.display = 'none'; // モーダルを非表示にする
+  if (uiElements.pauseScreen) uiElements.pauseScreen.style.display = 'none';
 
   // スコア・速度表示を非表示
   hideScoreAndSpeedDisplay();
@@ -255,6 +258,7 @@ export function showGameScreen(): void {
   }
   if (uiElements.privacyPolicyModal)
     uiElements.privacyPolicyModal.style.display = 'none'; // モーダルを非表示にする
+  if (uiElements.pauseScreen) uiElements.pauseScreen.style.display = 'none';
 
   // スコア・速度表示を表示
   showScoreAndSpeedDisplay();
@@ -287,9 +291,28 @@ export function showGameOverScreen(
   }
   if (uiElements.privacyPolicyModal)
     uiElements.privacyPolicyModal.style.display = 'none'; // モーダルを非表示にする
+  if (uiElements.pauseScreen) uiElements.pauseScreen.style.display = 'none';
 
   // ゲームオーバー画面では左上のスコア・速度表示を非表示
   hideScoreAndSpeedDisplay();
+}
+
+/**
+ * ポーズ画面を表示
+ */
+export function showPauseScreen(): void {
+  if (uiElements.pauseScreen) {
+    uiElements.pauseScreen.style.display = 'flex';
+  }
+}
+
+/**
+ * ポーズ画面を非表示
+ */
+export function hidePauseScreen(): void {
+  if (uiElements.pauseScreen) {
+    uiElements.pauseScreen.style.display = 'none';
+  }
 }
 
 /**

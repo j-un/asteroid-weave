@@ -30,7 +30,7 @@ export interface CollisionResult {
   impactPoint?: THREE.Vector3;
 }
 
-export type GameState = 'opening' | 'playing' | 'gameover';
+export type GameState = 'opening' | 'playing' | 'gameover' | 'paused';
 
 export interface KeysPressed {
   [key: string]: boolean;
