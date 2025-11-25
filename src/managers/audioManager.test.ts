@@ -49,7 +49,9 @@ const mockAudioContext = {
 
 const fetchSpy = vi.spyOn(globalThis, 'fetch');
 
-window.AudioContext = vi.fn().mockImplementation(() => mockAudioContext);
+window.AudioContext = vi.fn().mockImplementation(function () {
+  return mockAudioContext;
+});
 window.webkitAudioContext = window.AudioContext;
 
 // --- Tests ---
