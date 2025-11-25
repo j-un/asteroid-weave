@@ -20,11 +20,13 @@ vi.mock('three', async (importOriginal) => {
   const actual = (await importOriginal()) as typeof THREE;
   return {
     ...actual,
-    PerspectiveCamera: vi.fn(() => ({
-      position: new actual.Vector3(),
-      lookAt: vi.fn(),
-    })),
-    Vector3: vi.fn((x = 0, y = 0, z = 0) => {
+    PerspectiveCamera: vi.fn(function () {
+      return {
+        position: new actual.Vector3(),
+        lookAt: vi.fn(),
+      };
+    }),
+    Vector3: vi.fn(function (x = 0, y = 0, z = 0) {
       const vec = new actual.Vector3(x, y, z);
       vec.clone = vi.fn(() => new actual.Vector3(vec.x, vec.y, vec.z)); // cloneをモック
       vec.set = vi.fn(function (
@@ -40,7 +42,10 @@ vi.mock('three', async (importOriginal) => {
       });
       return vec;
     }),
-    Box3: vi.fn((min = new actual.Vector3(), max = new actual.Vector3()) => {
+    Box3: vi.fn(function (
+      min = new actual.Vector3(),
+      max = new actual.Vector3()
+    ) {
       const box = {
         min: min,
         max: max,
