@@ -24,15 +24,21 @@ vi.mock('three', async (importOriginal) => {
   const actual = (await importOriginal()) as typeof THREE; // 型を明示的に指定
   return {
     ...actual,
-    Mesh: vi.fn(() => ({
-      position: new actual.Vector3(),
-      scale: new actual.Vector3(1, 1, 1),
-      userData: { velocity: new actual.Vector3(), creationTime: 0 },
-      geometry: { dispose: vi.fn() },
-      material: { dispose: vi.fn(), map: null, opacity: 1.0 },
-    })),
-    SphereGeometry: vi.fn(() => ({ dispose: vi.fn() })),
-    MeshBasicMaterial: vi.fn(() => ({ dispose: vi.fn(), map: null })),
+    Mesh: vi.fn(function () {
+      return {
+        position: new actual.Vector3(),
+        scale: new actual.Vector3(1, 1, 1),
+        userData: { velocity: new actual.Vector3(), creationTime: 0 },
+        geometry: { dispose: vi.fn() },
+        material: { dispose: vi.fn(), map: null, opacity: 1.0 },
+      };
+    }),
+    SphereGeometry: vi.fn(function () {
+      return { dispose: vi.fn() };
+    }),
+    MeshBasicMaterial: vi.fn(function () {
+      return { dispose: vi.fn(), map: null };
+    }),
   };
 });
 
