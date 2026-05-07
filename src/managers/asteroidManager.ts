@@ -33,20 +33,33 @@ export function createAsteroid(): void {
   const asteroid = new THREE.Mesh(geometry, material);
   asteroid.userData.radius = radius;
 
-  asteroid.position.x = (Math.random() - 0.5) * GAME_CONSTANTS.FIELD_WIDTH;
-  asteroid.position.y = (Math.random() - 0.5) * GAME_CONSTANTS.FIELD_HEIGHT;
+  // 到達点(自機Z平面)でのXY分布が一様になるよう、ドリフトから逆算してスポーン位置を決める。
+  // 単純に SPAWN_Z 平面で一様にスポーンすると、XYドリフト畳み込みで端の密度が下がり
+  // 四隅が安全になってしまうため (Issue #17)。
+  const targetX = (Math.random() - 0.5) * GAME_CONSTANTS.FIELD_WIDTH;
+  const targetY = (Math.random() - 0.5) * GAME_CONSTANTS.FIELD_HEIGHT;
+
+  const driftX =
+    (Math.random() - 0.5) * ASTEROID_CONSTANTS.ASTEROID_XY_SWAY_FACTOR;
+  const driftY =
+    (Math.random() - 0.5) * ASTEROID_CONSTANTS.ASTEROID_XY_SWAY_FACTOR;
+  const zSpeed =
+    currentDynamicAsteroidSpeed +
+    Math.random() * ASTEROID_CONSTANTS.ASTEROID_SPEED_RANDOM_ADD_MAX;
+  const travelFrames =
+    (ASTEROID_CONSTANTS.ASTEROID_TARGET_Z -
+      ASTEROID_CONSTANTS.ASTEROID_SPAWN_Z) /
+    zSpeed;
+
+  asteroid.position.x = targetX - driftX * travelFrames;
+  asteroid.position.y = targetY - driftY * travelFrames;
   asteroid.position.z = ASTEROID_CONSTANTS.ASTEROID_SPAWN_Z;
 
   asteroid.rotation.x = Math.random() * 2 * Math.PI;
   asteroid.rotation.y = Math.random() * 2 * Math.PI;
   asteroid.rotation.z = Math.random() * 2 * Math.PI;
 
-  asteroid.userData.velocity = new THREE.Vector3(
-    (Math.random() - 0.5) * ASTEROID_CONSTANTS.ASTEROID_XY_SWAY_FACTOR,
-    (Math.random() - 0.5) * ASTEROID_CONSTANTS.ASTEROID_XY_SWAY_FACTOR,
-    currentDynamicAsteroidSpeed +
-      Math.random() * ASTEROID_CONSTANTS.ASTEROID_SPEED_RANDOM_ADD_MAX
-  );
+  asteroid.userData.velocity = new THREE.Vector3(driftX, driftY, zSpeed);
 
   const boundingBox = new THREE.Box3().setFromObject(asteroid);
   asteroids.push({ mesh: asteroid, boundingBox: boundingBox });
