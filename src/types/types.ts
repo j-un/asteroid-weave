@@ -54,6 +54,7 @@ export interface AsteroidConstants {
   ASTEROID_SPEED_RANDOM_ADD_MAX: number;
   ASTEROID_XY_SWAY_FACTOR: number;
   ASTEROID_SPAWN_Z: number;
+  ASTEROID_TARGET_Z: number;
   ASTEROID_DESPAWN_Z: number;
   ASTEROID_SPAWN_INTERVAL: number;
 }
