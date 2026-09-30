@@ -10,6 +10,13 @@ updates:
     schedule:
       interval: "weekly"
     groups:
+      # Keep TypeScript on its own PR so a major bump cannot land with
+      # eslint/typescript-eslint (those still peer-depend on TypeScript 6.x).
+      typescript:
+        patterns:
+          - "typescript"
       all-dependencies:
         patterns:
           - "*"
+        exclude-patterns:
+          - "typescript"
