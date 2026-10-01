@@ -9,6 +9,13 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    # @typescript-eslint still peers `typescript >=4.8.4 <6.1.0`, so TS 7+
+    # fails npm ci (ERESOLVE). Isolation (#82) still lets Dependabot bump
+    # typescript alone; ignore 7.x and later majors until that peer range
+    # admits them. 6.x minor/patch updates remain allowed.
+    ignore:
+      - dependency-name: "typescript"
+        versions: [">=7"]
     groups:
       # Keep TypeScript on its own PR so a major bump cannot land with
       # eslint/typescript-eslint (those still peer-depend on TypeScript 6.x).
